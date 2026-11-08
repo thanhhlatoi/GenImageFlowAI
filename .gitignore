@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+*.pyc
+# Anh ket qua / file sinh ra (tao lai duoc)
+out/
+templates/*/out/
+templates/*/_gen/

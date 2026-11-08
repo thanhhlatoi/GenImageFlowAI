@@ -1,0 +1,13 @@
+{
+  "size": [1280, 720],
+  "header_patch": [175, 65, 735, 195],
+  "avatar_center": [93, 138],
+  "avatar_radius": 70,
+  "title_box": [80, 210, 1200, 690],
+  "font": "Anton-Regular.ttf",
+  "font_max": 72,
+  "font_min": 30,
+  "line_height": 1.25,
+  "avatar_prompt": "A cute fox wearing small round glasses, reading a newspaper, 3D render, soft studio lighting, centered portrait, plain warm background",
+  "bg_prompt": "bright airy pastel watercolor wash of peach and light blue clouds, soft and light, painting"
+}

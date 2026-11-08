@@ -1,0 +1,5 @@
+gflow-cli==0.96.1
+pillow>=11
+
+# Khong cai bang pip (goi he thong, dung de chay Chrome an):
+#   sudo apt install -y xvfb
