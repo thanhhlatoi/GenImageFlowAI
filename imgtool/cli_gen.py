@@ -5,6 +5,7 @@ from pathlib import Path
 
 from .gflow import run_gflow
 from .lines import read_lines
+from .paths import OUTPUT_ROOT
 
 
 def main():
@@ -14,7 +15,7 @@ def main():
     ap.add_argument("-n", "--count", type=int, default=1, help="So anh moi prompt")
     ap.add_argument("--aspect", help="Ti le, vd 16:9, 9:16, 1:1")
     ap.add_argument("--model", help="Ten model (xem: gflow image t2i --help)")
-    ap.add_argument("--out", default="./out", help="Thu muc luu ket qua")
+    ap.add_argument("--out", default=str(OUTPUT_ROOT / "genImage"), help="Thu muc luu ket qua")
     ap.add_argument("--jitter", help="Nghi giua cac prompt, vd 3-8 (giay); mac dinh cua gflow")
     a = ap.parse_args()
 

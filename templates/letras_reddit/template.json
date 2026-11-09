@@ -1,0 +1,49 @@
+{
+  "size": [
+    1280,
+    720
+  ],
+  "header_patch": [
+    325,
+    100,
+    740,
+    178
+  ],
+  "avatar_center": [
+    275,
+    141
+  ],
+  "avatar_radius": 41,
+  "title_box": [
+    170,
+    205,
+    1110,
+    590
+  ],
+  "font": "Anton-Regular.ttf",
+  "font_max": 72,
+  "font_min": 30,
+  "line_height": 1.25,
+  "avatar_prompt": "A single plump red strawberry with green leaves, hand-painted illustration style, slightly textured, centered, on a plain soft dusty-pink background, square avatar, no text",
+  "bg_prompt": "vibrant playful pastel gradient background with soft colorful bokeh and tiny floating strawberries, bright and clean, no text",
+  "card_box": [
+    134,
+    72,
+    1146,
+    648
+  ],
+  "card_radius": 76,
+  "avatar_zoom": 0.62,
+  "bg_themes": [
+    "sunset pink and orange tones",
+    "fresh mint green and aqua tones",
+    "lavender and lilac purple tones",
+    "sky blue and white clouds tones",
+    "warm yellow and peach tones",
+    "coral red and rose tones",
+    "teal and turquoise ocean tones",
+    "soft lime green and cream tones",
+    "baby blue and pink cotton candy tones",
+    "golden orange and cream tones"
+  ]
+}

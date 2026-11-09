@@ -6,6 +6,7 @@ from pathlib import Path
 
 from .compose import render
 from .lines import read_lines
+from .paths import OUTPUT_ROOT
 from .template import ensure_asset
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -40,8 +41,8 @@ def main():
     ensure_asset(tpl, "avatar.jpg", "avatar_prompt", "1:1", a.new_avatar)
     ensure_asset(tpl, "bg.jpg", "bg_prompt", "16:9", a.new_bg)
 
-    out = tpl / "out"
-    out.mkdir(exist_ok=True)
+    out = OUTPUT_ROOT / a.template
+    out.mkdir(parents=True, exist_ok=True)
     for i, t in enumerate(titles, 1):
         slug = re.sub(r"[^a-z0-9]+", "-", t.lower())[:40].strip("-")
         path = out / f"{i:02d}_{slug}.png"

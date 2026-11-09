@@ -5,3 +5,4 @@ __pycache__/
 out/
 templates/*/out/
 templates/*/_gen/
+.env

@@ -34,16 +34,16 @@ Moi template co file `templates/<ten>/titles.txt` rieng, de cac kieu khong bi la
 templates/reddit_post/
 ├── titles.txt     # tieu de, moi dong 1 tieu de
 ├── template.json
-└── out/           # anh ra: 01_..., 02_..., 03_... dung thu tu dong
+└── (anh ra o NasSynology/GenImageFlowAI/<ten>/)  # anh ra: 01_..., 02_..., 03_... dung thu tu dong
 ```
 
 - Chay `make <ten>` khong kem tham so thi doc `titles.txt` va lam lan luot tu tren xuong; so thu tu trong ten anh (`01_`, `02_`) khop so thu tu dong.
 - Tieu de dai cu de tren **1 dong**, khong xuong dong; chu tu co cho vua khung.
 - Dong bat dau bang `#` va dong trong bi bo qua (dung de ghi chu).
-- Moi lan chay tao lai anh tu `01_`. Doi thu tu dong thi xoa `out/` truoc, neu khong anh cu ten cu van con.
+- Moi lan chay tao lai anh tu `01_`. Doi thu tu dong thi xoa thu muc anh ra truoc, neu khong anh cu ten cu van con.
 - Khong co `titles.txt` va khong truyen `--title`/`--file` thi tool bao loi.
 
-Anh luu o `templates/reddit_post/out/`. Chu tu co theo do dai tieu de; tieu de qua dai se bao loi.
+Anh luu o `~/Documents/NasSynology/GenImageFlowAI/reddit_post/` (doi bang bien moi truong `IMGTOOL_OUT`). Chu tu co theo do dai tieu de; tieu de qua dai se bao loi.
 
 Avatar va nen duoc tao **1 lan** (luc chay dau tien) roi luu `avatar.jpg`, `bg.jpg` trong folder template de dung lai.
 
@@ -51,7 +51,7 @@ Avatar va nen duoc tao **1 lan** (luc chay dau tien) roi luu `avatar.jpg`, `bg.j
 |---|---|
 | Tao lai avatar | `--new-avatar` |
 | Tao lai nen | `--new-bg` |
-| Luu tung lop de soi loi | `--debug` (ra `out/_debug/`) |
+| Luu tung lop de soi loi | `--debug` (ra `templates/<ten>/out/_debug/`) |
 
 Doi hinh avatar/nen: sua `avatar_prompt` / `bg_prompt` trong `templates/reddit_post/template.json`, roi chay voi `--new-avatar` / `--new-bg`.
 
@@ -82,22 +82,65 @@ IMGTOOL_SHOW=1 python -m imgtool gen --file prompts.txt
 
 `gflow auth login` van hien Chrome binh thuong de ban dang nhap.
 
-## 5. Them kieu thiet ke moi
+## 5. Them kieu thiet ke moi (moi kenh 1 template)
 
 1. Copy `templates/reddit_post/` thanh `templates/ten_kieu_moi/`.
 2. Thay `original.jpg` bang anh mau cua kieu do; xoa `avatar.jpg`, `bg.jpg`, `out/`.
 3. Sua toa do va prompt trong `template.json`.
 4. Chay `python -m imgtool make ten_kieu_moi --title "..."`.
 
-## 6. Cau truc
+## 6. Tao thumbnail cho ca du an tren NAS (titles + batch)
+
+Luu anh mac dinh vao `~/Documents/NasSynology/GenImageFlowAI/` (doi bang bien `IMGTOOL_OUT`). Voi du an co san tren NAS (vd `YouTube/ES/Redit/ES1 404 Cronicas Redditeras`, ten thumbnail cu = tieu de):
+
+```bash
+# 1. Quet thumbnail cu, lay ten file lam tieu de -> <du an>/titles.txt (de sua)
+python3 -m imgtool titles "<thu muc du an>"          # --force de ghi de, --out de doi noi ghi
+
+# 2. Khai bao template cua kenh (1 lan): <du an>/project.json
+echo '{"template": "reddit_post"}' > "<thu muc du an>/project.json"
+
+# 3. Tao thumbnail moi vao new/ canh thumbnail cu
+python3 -m imgtool batch "<thu muc du an>"           # --template ten, --force lam lai
+```
+
+- `titles.txt`: moi dong `duong/dan/thumbnail cu | tieu de`. Chi sua phan SAU dau `|`. Dong bat dau `#` hoac xoa dong de bo qua tap do.
+- Anh moi: `<thu muc thumbnail cu>/new/<ten cu>.png`. Tap nao da co anh trong `new/` thi bo qua. Loi o 1 tieu de khong lam dung ca lo.
+- Moi kenh 1 template rieng trong `templates/` (xem muc 8), moi du an tro toi template bang `project.json`.
+
+## 7. [TODO] Doi tieu de bang 9router (Codex): lenh `rewrite`
+
+Chua lam. Y tuong: them buoc nam giua `titles` va `batch`:
 
 ```
-imgtool/        code (gflow.py, compose.py, template.py, cli_*.py, fonts/)
+titles  ->  titles.txt  ->  rewrite (9router/Codex)  ->  titles.txt da doi  ->  batch
+```
+
+Cach hoat dong:
+1. 9router chay tren may nhu proxy tuong thich OpenAI (thuong `http://localhost:20128/v1`, can API key). Tool goi `POST /chat/completions` voi model Codex da cau hinh trong 9router.
+2. Doc tung dong `duong dan | tieu de`, gui tieu de cu kem prompt mau (vd "Viet lai tieu de Reddit nay bang tieng Tay Ban Nha, giu y, hap dan hon, toi da N ky tu"), nhan tieu de moi. Co the gui nhieu tieu de trong 1 request cho nhanh va do ton quota.
+3. Khong ghi de mat ban cu: giu ca hai, vd `Tap1/Old.jpg | Tieu de moi | # cu: Old title`, hoac ghi ra `titles_new.txt` de xem va sua tay truoc khi chay `batch`.
+4. Chay lai thi dong da viet lai duoc bo qua (`--force` de lam lai).
+
+Nen co:
+- Prompt rieng moi kenh: `templates/<ten>/rewrite_prompt.txt` (moi kenh giong va ngon ngu khac nhau).
+- Gioi han do dai tieu de lay tu template (chu tu co nhung tieu de qua dai se bao loi).
+- Cau hinh qua bien moi truong `ROUTER_URL`, `ROUTER_KEY`, `ROUTER_MODEL`; khong ghi cung key vao code.
+
+Can quyet dinh khi lam:
+- URL 9router va ten model Codex dang dung (key de trong bien moi truong, khong gui vao chat).
+- Muc dich doi: dich sang ngon ngu khac, lam hap dan hon, hay rut gon?
+- 1 phuong an cho moi tieu de, hay 3 phuong an de chon?
+
+## 8. Cau truc
+
+```
+imgtool/        code (gflow.py, compose.py, template.py, paths.py, cli_*.py, fonts/)
 templates/      moi kieu thiet ke 1 folder
 tests/          python tests/test_compose.py  (chay offline)
 ```
 
-## 7. Loi thuong gap
+## 9. Loi thuong gap
 
 | Loi | Cach xu ly |
 |---|---|
